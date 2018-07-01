@@ -3,11 +3,10 @@ import os
 
 allFiles = []
 fileTypes = []
-debug = 1  # 1: enable logs
-
+debug = 1  # 1: enable logs , 0:disable logs
 
 class FileType:
-    # dotSth is string like -> "js" , "py" ,...
+    # dotSth is string like -> "js" , "py" , "cs"...
     def __init__(self, dotSth):
         self.key = dotSth
         self.filesNum = 0  # how match files
@@ -32,21 +31,22 @@ class FileType:
             # is match
             self.filesNum += 1
             self.linesNum = getLineNumber(filePath)
-            LogIt(self.key + " files num:" + self.filesNum + " lines: " + self.linesNum)
+            LogIt(self.key + " files num:" +
+                  self.filesNum + " lines: " + self.linesNum)
 
     def safeAddFiles(self, filePathsList):
         for i in filePathsList:
             self.safeAddFile(i)
 
-
-def getDirContent():
-    return os.listdir(os.getcwd())
-
+def getDirContent(subPath):
+    if subPath == "":
+        return  os.listdir(os.getcwd())
+    else:
+        return os.listdir(os.getcwd() + "/" + subPath)
 
 def LogIt(message):
     if debug:
         print("Log : -> ", message)
-
 
 def getLineNumber(fileName):
     fp = open(fileName, 'r')
@@ -57,29 +57,50 @@ def getLineNumber(fileName):
         cnt += 1
     return cnt
 
+def ShowHelp():
+    print()
+    print(" " + 50 * "-")
+    print("|                       HELP                       |")
+    print("| enter postfix like -> py , js , java , cpp ...   |")
+    print("| enter 'con' to continue                          |")
+    print(" " + 50 * "-")
+    print()
 
-print(30*"-")
-print("postfix like -> py , js , java , cpp ...")
-print("enter con to continue")
-print(30*"-")
+def getPostFixs():
+    while True:
+        newformat = input("> ")
+        if newformat == "con":
+            break
+        fileTypes.append(FileType(newformat))
 
-#TODO : get dot sths as argmants if user do not enter run blow code
-#read dot sth's
-exitLoop = False
-while True:
-    newformat = input("enter postfix : ")
-    if newformat == "con":
-        break
-    fileTypes.append(FileType(newformat))
+def getProjectAllFilesAndDirs(rootContent):
+    while 1:
+        isSthChange = 0
+        for i in rootContent:
+            try:
+                #dir
+                newDirs = getDirContent(i)
+                allFiles.extend(newDirs)
+                isSthChange = 1
+            except:
+                #file
+                allFiles.append(i)
+        if isSthChange == 0:
+            break
 
-rootContext = getDirContent()
-print(rootContext)
+# TODO : get dot sths as argmants if user do not enter run blow code
 
-for i in rootContext:
-    try:
-        cnt = getLineNumber(i)
-        print(cnt)
-    except:
-        pass
+#main 
+ShowHelp()
+getPostFixs()
 
-d = FileType("js")
+rootDir = getDirContent("")
+
+print(getProjectAllFilesAndDirs(rootDir))
+
+#-----------------------------------------------------
+# 1.input                               check         |
+# 2.make files list                                   |
+# 3.pass list to FileTypes                            |
+# 4.get report from FileTypes                         |
+#-----------------------------------------------------
