@@ -5,6 +5,45 @@ allFiles = []
 fileTypes = []
 debug = 1  # 1: enable logs , 0:disable logs
 
+
+def getPostfixExplanation(postfix):
+    if postfix == "js":
+        return "javascript file"
+    elif postfix == "py":
+        return "python file"
+    elif postfix == "java":
+        return "java file"
+    elif postfix == "sh":
+        return "bash script"
+    elif postfix == "jar":
+        return "jar package"
+    elif postfix == "xml":
+        return "extensible markup (xml)"
+    elif postfix == "png":
+        return "bitmap (png)"
+    elif postfix == "jpg":
+        return "bitmap (jpg)"
+    elif postfix == "svg":
+        return "vector (svg)"
+    elif postfix == "cs":
+        return "c# file"
+    elif postfix == "ts":
+        return "typescriipt"
+    elif postfix == "rb":
+        return "ruby file"
+    elif postfix == "htm" or postfix == "html":
+        return "hyper text markup file (html)"
+    elif postfix == "css":
+        return "style sheet"
+    elif postfix == "txt" or postfix == "text":
+        return "text file"
+    elif postfix == "json":
+        return "json file"
+
+    #not available
+    return postfix + " file"
+
+
 class FileType:
     # dotSth is string like -> "js" , "py" , "cs"...
     def __init__(self, dotSth):
@@ -38,15 +77,18 @@ class FileType:
         for i in filePathsList:
             self.safeAddFile(i)
 
+
 def getDirContent(subPath):
     if subPath == "":
-        return  os.listdir(os.getcwd())
+        return os.listdir(os.getcwd())
     else:
         return os.listdir(os.getcwd() + "/" + subPath)
+
 
 def LogIt(message):
     if debug:
         print("Log : -> ", message)
+
 
 def getLineNumber(fileName):
     fp = open(fileName, 'r')
@@ -57,14 +99,19 @@ def getLineNumber(fileName):
         cnt += 1
     return cnt
 
+
 def ShowHelp():
     print()
-    print(" " + 50 * "-")
-    print("|                       HELP                       |")
-    print("| enter postfix like -> py , js , java , cpp ...   |")
-    print("| enter 'con' to continue                          |")
-    print(" " + 50 * "-")
+    print(" " + 52 * "-")
+    print("|                 ProjectAnalyzer                    |")
+    print("|                                                    |")
+    print("| github:https://github.com/ali77gh/ProjectAnalyzer  |")
+    print("|                                                    |")
+    print("| for specific file :                                |")
+    print("|  > python3 analyze.py 'postfix1' 'postfix2' ,...   |")
+    print(" " + 52 * "-")
     print()
+
 
 def getPostFixs():
     while True:
@@ -73,34 +120,36 @@ def getPostFixs():
             break
         fileTypes.append(FileType(newformat))
 
+
 def getProjectAllFilesAndDirs(rootContent):
     while 1:
         isSthChange = 0
         for i in rootContent:
             try:
-                #dir
+                # dir
                 newDirs = getDirContent(i)
                 allFiles.extend(newDirs)
                 isSthChange = 1
             except:
-                #file
+                # file
                 allFiles.append(i)
         if isSthChange == 0:
             break
 
 # TODO : get dot sths as argmants if user do not enter run blow code
 
-#main 
+
+# main
 ShowHelp()
-getPostFixs()
+# getPostFixs()
 
-rootDir = getDirContent("")
+#rootDir = getDirContent("")
 
-print(getProjectAllFilesAndDirs(rootDir))
+# print(getProjectAllFilesAndDirs(rootDir))
 
-#-----------------------------------------------------
-# 1.input                               check         |
+# ------------------------todo-------------------------
+# 1.input                             deleted         |
 # 2.make files list                                   |
 # 3.pass list to FileTypes                            |
 # 4.get report from FileTypes                         |
-#-----------------------------------------------------
+# -----------------------------------------------------
