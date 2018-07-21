@@ -1,4 +1,4 @@
-# i write all codes on 1 file becuse its easy to move for users ;)
+# i write all codes on 1 file because its easy to move for users ;)
 import os
 
 allFiles = []
