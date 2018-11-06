@@ -13,10 +13,12 @@ python3 analyzer.py <postfix>
 
 ## example
 ~~~posh
-$ python3 analyze.py js
+$ python3 analyze.py java
  ----------------------------------------------------
 |                                                    |
-| js files count : 0                                 |
+| searching...                                       |
+| you have 77 java files                             |
+| you have 32859 java lines                          |
 |                                                    |
  ----------------------------------------------------
 ~~~

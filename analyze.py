@@ -34,6 +34,11 @@ def getFileList(path, filePostfix):
             array.append(os.path.join(root, filename))
     return array
 
+def getLineNumbers(Files):
+    lines = 0
+    for i in Files:
+        lines+= sum(1 for line in open(i))
+    return lines
 
 # main
 if(len(sys.argv) == 1):
@@ -46,10 +51,12 @@ if(len(sys.argv) == 3):
 
 postfix = sys.argv[1]
 
-files = getFileList(os.getcwd(), postfix)
-
 Line()
 Log("")
-Log(postfix + " files count : " + str(len(files)))
+Log("searching...")
+files = getFileList(os.getcwd(), postfix)
+lines = getLineNumbers(files)
+Log("you have " + str(len(files)) + " " + postfix + " files")
+Log("you have " + str(lines) + " " + postfix + " lines")
 Log("")
 Line()
