@@ -3,10 +3,12 @@ this script can analyze your project (count your files and how mach line of code
 this is my first activity on github
 
 ## how to use
-0. you can not!!! its not ready
 1. get analyzer.py
 2. put analyzer.py in root of your project 
-3. run **python3 analyzer.py**
+3. run:
+~~~posh
+python3 analyzer.py
+~~~
 4. see magic :|
 
 ## dependency
