@@ -52,6 +52,9 @@ if(len(sys.argv) == 3):
 postfix = sys.argv[1]
 
 Line()
+Log("                  ProjectAnalyzer")
+Log("")
+Log("https://github.com/ali77gh/ProjectAnalyzer")
 Log("")
 Log("searching...")
 files = getFileList(os.getcwd(), postfix)
