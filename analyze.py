@@ -1,3 +1,4 @@
+#!usr/bin/python3
 # i write all codes on 1 file because its easy to move for users ;)
 
 from fnmatch import filter
@@ -13,13 +14,13 @@ def ShowHelp():
     print("| github:https://github.com/ali77gh/ProjectAnalyzer  |")
     print("|                                                    |")
     print("| how to use :                                       |")
-    print("|  > python3 analyze.py 'postfix1'                   |")
+    print("|  > python3 analyze.py 'postfix'                    |")
     print(" " + 52 * "-")
     print()
 
 
-def Log(str):
-    print("| " + str + ( (51-len(str)) *" ") + "|")
+def ShowInBox(str):
+    print("| " + str + ((51-len(str)) * " ") + "|")
 
 
 def Line():
@@ -34,32 +35,53 @@ def getFileList(path, filePostfix):
             array.append(os.path.join(root, filename))
     return array
 
+
 def getLineNumbers(Files):
     lines = 0
     for i in Files:
-        lines+= sum(1 for line in open(i))
+        lines += sum(1 for line in open(i))
     return lines
+
 
 # main
 if(len(sys.argv) == 1):
     ShowHelp()
     exit(0)
 
-if(len(sys.argv) == 3):
+if(len(sys.argv) > 2):
+    ShowHelp()
+    exit()
+
+if(sys.argv[1]=="--help"):
     ShowHelp()
     exit()
 
 postfix = sys.argv[1]
 
 Line()
-Log("                  ProjectAnalyzer")
-Log("")
-Log("https://github.com/ali77gh/ProjectAnalyzer")
-Log("")
-Log("searching...")
+ShowInBox("                  ProjectAnalyzer")
+ShowInBox("")
+ShowInBox("https://github.com/ali77gh/ProjectAnalyzer")
+ShowInBox("")
+ShowInBox("searching...")
 files = getFileList(os.getcwd(), postfix)
-lines = getLineNumbers(files)
-Log("you have " + str(len(files)) + " " + postfix + " files")
-Log("you have " + str(lines) + " " + postfix + " lines")
-Log("")
+if len(files) == 0:
+    ShowInBox("there is no "+ postfix + " file")
+    Line()
+    exit()
+    
+try:
+    lines = getLineNumbers(files)
+except UnicodeDecodeError as e:
+    ShowInBox("this file type is not unicode :|")
+    Line()
+    exit()
+
+linePerFile = round(lines / len(files), 2)
+ShowInBox("you have " + str(len(files)) + " " + postfix + " files")
+ShowInBox("you have " + str(lines) + " " + " lines of " + postfix)
+ShowInBox("lines per file avrage: " + str(linePerFile))
+ShowInBox("")
 Line()
+
+# todo --ignore param
