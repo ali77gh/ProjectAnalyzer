@@ -96,7 +96,7 @@ except UnicodeDecodeError as e:
 linePerFile = round(lines / len(files), 2)
 ShowInBox("you have " + str(len(files)) + " " + postfix + " files")
 ShowInBox("you have " + str(lines) + " " + " lines of " + postfix)
-ShowInBox("lines per file avrage: " + str(linePerFile))
+ShowInBox("lines per file average: " + str(linePerFile))
 ShowInBox("")
 Line()
 
