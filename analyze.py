@@ -1,5 +1,4 @@
 #!/usr/bin/python3
-# i write all codes on 1 file because its easy to move for users ;)
 
 from fnmatch import filter
 import os
@@ -8,25 +7,27 @@ import sys
 
 def ShowHelp():
     print()
-    print(" " + 62 * "-")
-    print("|                       ProjectAnalyzer                        |")
-    print("|                                                              |")
-    print("| github:https://github.com/ali77gh/ProjectAnalyzer            |")
-    print("|                                                              |")
-    print("| how to use :                                                 |")
-    print("|  > python3 analyze.py 'postfix'                              |")
-    print("|  > python3 analyze.py 'postfix' --ignore 'dir or files names'|")
-    print(" " + 62 * "-")
+    print("┌" + (62 * "─") + "┐")
+    print("│                       ProjectAnalyzer                        │")
+    print("│                                                              │")
+    print("│ github:https://github.com/ali77gh/ProjectAnalyzer            │")
+    print("│                                                              │")
+    print("│ how to use :                                                 │")
+    print("│  > python3 analyze.py 'postfix'                              │")
+    print("│  > python3 analyze.py 'postfix' --ignore 'dir or files names'│")
+    print("└" + (62 * "─") + "┘")
     print()
 
 
 def ShowInBox(str):
-    print("| " + str + ((51-len(str)) * " ") + "|")
+    print("│ " + str + ((51-len(str)) * " ") + "│")
 
 
-def Line():
-    print(" " + 52 * "-")
+def TopLine():
+    print("┌" + (52 * "─") + "┐")
 
+def BottomLine():
+    print("└" + (52 * "─") + "┘")
 
 def getFileList(path, filePostfix):
     array = []
@@ -73,7 +74,7 @@ if len(sys.argv) > 3 and sys.argv[2] == "--ignore":
 
 postfix = sys.argv[1]
 
-Line()
+TopLine()
 ShowInBox("                  ProjectAnalyzer")
 ShowInBox("")
 ShowInBox("https://github.com/ali77gh/ProjectAnalyzer")
@@ -98,6 +99,6 @@ ShowInBox("you have " + str(len(files)) + " " + postfix + " files")
 ShowInBox("you have " + str(lines) + " " + " lines of " + postfix)
 ShowInBox("lines per file average: " + str(linePerFile))
 ShowInBox("")
-Line()
+BottomLine()
 
 # todo --ignore param
