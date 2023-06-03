@@ -16,7 +16,7 @@ repo="ali77gh/ProjectAnalyzer"
 tag_name=$(curl --silent https://api.github.com/repos/$repo/releases/latest \
                   | grep '"tag_name"' \
                   | sed --regexp-extended 's/.*"([^"]+)".*/\1/')
-curl -sfL "https://github.com/$repo/releases/download/$tag_name/shecan.py" --output temp.py
+curl -sfL "https://github.com/$repo/releases/download/$tag_name/analyze.py" --output temp.py
 echo "done"
 
 echo "installing..."
@@ -27,5 +27,5 @@ echo "making script executable..."
 chmod +x "$install_path"
 echo "done"
 
-echo "shecan-cli installed successfully"
+echo "analyze.py installed successfully"
 analyzer.py help
