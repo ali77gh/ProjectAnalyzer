@@ -28,4 +28,4 @@ chmod +x "$install_path"
 echo "done"
 
 echo "analyze.py installed successfully"
-analyzer.py help
+analyzer.py

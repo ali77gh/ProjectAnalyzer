@@ -84,14 +84,14 @@ files = getFileList(os.getcwd(), postfix)
 RemoveIgnores(files, ignores)
 if len(files) == 0:
     ShowInBox("there is no " + postfix + " file")
-    Line()
+    BottomLine()
     exit()
 
 try:
     lines = getLineNumbers(files)
 except UnicodeDecodeError as e:
     ShowInBox("this file type is not unicode :|")
-    Line()
+    BottomLine()
     exit()
 
 linePerFile = round(lines / len(files), 2)
