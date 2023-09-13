@@ -4,7 +4,7 @@ use std::{
     fs::{self, DirEntry}
 };
 
-pub fn walk(dir: &Path, cb: &dyn Fn(&DirEntry)) -> io::Result<()> {
+pub fn walk(dir: &Path, cb: &mut dyn FnMut(&DirEntry)) -> io::Result<()> {
     if dir.is_dir() {
         for entry in fs::read_dir(dir)? {
             let entry = entry?;
