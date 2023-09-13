@@ -13,7 +13,7 @@ pub fn show_help(){
    println!("│ Options:                                      │");
    println!("│  -h, --help                                   │");
    println!("│  -v, --version                                │");
-   println!("│  -u --update                                  │");
+   println!("│  -u, --update                                 │");
    println!("│                                               │");
    println!("└───────────────────────────────────────────────┘");
              
