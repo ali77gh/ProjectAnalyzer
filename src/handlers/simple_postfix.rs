@@ -20,6 +20,16 @@ pub fn simple_postfix_handler(postfix: &String){
 
     let _ = walk(Path::new("./"), &mut cb);
 
-    println!("file_counter: {}", file_counter);
-    println!("line_counter: {}", line_counter);
+    println!("┌───────────────────────────────────────────────┐");
+    println!("│                ProjectAnalyzer                │");
+    println!("│                                               │");
+    println!("│ https://github.com/ali77gh/ProjectAnalyzer    │");
+    println!("│                                               │");
+    println!("│ searching...                                  │");
+    println!("│ you have {} {} files           \t\t│",file_counter,postfix);
+    println!("│ you have {} lines of {}      \t\t│",line_counter,postfix);
+    println!("│ lines per file average: 104.0                 │");
+    println!("│                                               │");
+    println!("└───────────────────────────────────────────────┘");
+
 }
