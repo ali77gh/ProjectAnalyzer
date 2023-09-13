@@ -8,7 +8,7 @@ pub fn show_help(){
    println!("│ https://github.com/ali77gh/ProjectAnalyzer    │");
    println!("│                                               │");
    println!("│ how to use :                                  │");
-   println!("│  > python3 analyze.py 'postfix'               │");
+   println!("│  > analyze 'postfix'                          │");
    println!("│                                               │");
    println!("└───────────────────────────────────────────────┘");
              

@@ -18,10 +18,10 @@ pub fn parse_input() -> RequestType {
             return RequestType::Help;
         } else if arg1 == "--version"{
             return RequestType::Version;
-        } else if arg1 == "update"{
+        } else if arg1 == "update" || arg1 == "--update"{
             return RequestType::Update;
         } else if arg1.starts_with("--"){
-            return RequestType::Invalid { msg: format!("unknown command --{}", arg1) };
+            return RequestType::Invalid { msg: format!("unknown command {}", arg1) };
         } else {
             return RequestType::SimplePostfix(arg1.clone());
         }
