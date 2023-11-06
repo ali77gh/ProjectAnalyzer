@@ -3,10 +3,11 @@ use std::{path::Path, fs::DirEntry, sync::mpsc, thread};
 use crate::utils::walker::walk;
 use std::fs;
 use std::path::PathBuf;
+use piechart::{Chart, Color, Data, Style};
 
 pub fn simple_postfix_handler(postfixes: Vec<String>){
-    let mut file_counter: HashMap<String, usize> = HashMap::new();
-    let mut line_counter: HashMap<String, usize> = HashMap::new();
+    let mut file_counter: HashMap<String, u64> = HashMap::new();
+    let mut line_counter: HashMap<String, u64> = HashMap::new();
     let mut post_set: HashSet<String> = HashSet::new();
 
     for p in postfixes{
@@ -51,7 +52,7 @@ pub fn simple_postfix_handler(postfixes: Vec<String>){
         let fc = file_counter.get_mut(x.postfix.as_str()).unwrap();
         let lc = line_counter.get_mut(x.postfix.as_str()).unwrap();
         *fc += 1;
-        *lc += x.bytes.iter().filter(|byte|byte==nl).count();
+        *lc += x.bytes.iter().filter(|byte|byte==nl).count() as u64;
     }
 
 
@@ -66,11 +67,37 @@ pub fn simple_postfix_handler(postfixes: Vec<String>){
         let division = if file_counter==&0 {0} else { line_counter / file_counter };
         println!("├───────────────────────────────────────────────┤");
         println!("│ {} files result:                 \t\t│", postfix);
-        println!("│   {} {} files                  \t\t│", file_counter, postfix);
-        println!("│   {} lines of {}             \t\t│", line_counter, postfix);
-        println!("│ average lines per file: {}       \t\t│", division);
+        println!("│   {} {} files                   \t\t│", file_counter, postfix);
+        println!("│   {} lines of {}               \t\t│", line_counter, postfix);
+        println!("│   average lines per file: {}       \t\t│", division);
     }
     println!("└───────────────────────────────────────────────┘");
+    
+    let chars = vec!['▰', '▼', '◆', '■', '•', '▪', '▴','▰', '▼', '◆', '■', '•', '▪', '▴','▰', '▼', '◆', '■', '•', '▪', '▴','▰', '▼', '◆', '■', '•', '▪', '▴', ];
+    let colors:Vec<Style> = vec![
+        Color::Green.into(),Color::Yellow.into(),Color::Blue.into(),Color::Purple.into(),
+        Color::Cyan.into(),Color::White.into(),Color::Red.into(),
+        Color::Green.into(),Color::Yellow.into(),Color::Blue.into(),Color::Purple.into(),
+        Color::Cyan.into(),Color::White.into(),Color::Red.into(),
+        Color::Green.into(),Color::Yellow.into(),Color::Blue.into(),Color::Purple.into(),
+    ];
+    let mut dataset = vec![];
+    let mut counter = 0;
+    for lang in line_counter{
+        dataset.push(Data { 
+            label: lang.0.into(),
+            value: lang.1 as f32,
+            color: Some(*colors.get(counter).unwrap()),
+            fill: *chars.get(counter).unwrap() 
+        });
+        counter += 1;
+    }
+    // draw chart
+    Chart::new()
+        .radius(counter as u16 +4)
+        .aspect_ratio(3)
+        .legend(true)
+        .draw(&dataset);
 
 }
 
