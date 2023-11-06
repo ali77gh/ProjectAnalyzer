@@ -14,7 +14,7 @@ use handlers::{
 fn main() {
 
     match parse_input() {
-        RequestType::SimplePostfix(postfix) => simple_postfix_handler(&postfix),
+        RequestType::SimplePostfix(postfixes) => simple_postfix_handler(postfixes),
         RequestType::Invalid{ msg } => {
             println!("{}", msg);
             show_help();

@@ -2,14 +2,14 @@
 use std::env;
 
 pub enum RequestType{
-    SimplePostfix(String),
+    SimplePostfix(Vec<String>),
     Invalid{msg: String},
     Help,
     Version,
     Update
 }
 
-pub fn parse_input() -> RequestType {
+pub fn parse_input() -> RequestType{
     let args: Vec<String> = env::args().collect();
     
     if let Some(arg1) = args.get(1){
@@ -22,7 +22,10 @@ pub fn parse_input() -> RequestType {
         } else if arg1.starts_with("--"){
             return RequestType::Invalid { msg: format!("  * Error: unknown command {} *  ", arg1) };
         } else {
-            return RequestType::SimplePostfix(arg1.clone());
+            let tmp = arg1.clone();
+            let tmp = tmp.split(",");
+            let tmp:Vec<String> = tmp.map(|s|s.to_string()).collect();
+            return RequestType::SimplePostfix(tmp);
         }
     }else{
         RequestType::Help
