@@ -1,7 +1,7 @@
 use std::{
-    path::Path, 
+    fs::{self, DirEntry},
     io,
-    fs::{self, DirEntry}
+    path::Path,
 };
 
 pub fn walk(dir: &Path, cb: &mut dyn FnMut(&DirEntry)) -> io::Result<()> {
