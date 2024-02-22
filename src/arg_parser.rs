@@ -37,8 +37,7 @@ impl MyArgs {
         match self.postfixes.clone() {
             Some(s) => Some(
                 s.split(',')
-                    .collect::<Vec<&str>>()
-                    .iter()
+                    .filter(|i| !i.is_empty())
                     .map(|i| i.to_string())
                     .collect::<Vec<String>>(),
             ),
