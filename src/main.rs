@@ -1,26 +1,26 @@
+mod arg_parser;
 
-mod input_parser;
+use clap::Parser;
+
+use arg_parser::MyArgs;
+
 mod handlers;
 mod utils;
 
-use input_parser::{ RequestType, parse_input };
-use utils::show_help::show_help;
-use handlers::{
-    simple_postfix::simple_postfix_handler,
-    update::update_handler,
-    version::version_handler
-};
+use handlers::{simple_postfix::simple_postfix_handler, update::update_handler};
 
 fn main() {
+    let args = MyArgs::parse();
 
-    match parse_input() {
-        RequestType::SimplePostfix(postfixes) => simple_postfix_handler(postfixes),
-        RequestType::Invalid{ msg } => {
-            println!("{}", msg);
-            show_help();
-        },
-        RequestType::Version => version_handler(),
-        RequestType::Update => update_handler(), 
-        RequestType::Help => show_help(),
-    };
+    if let Some(command) = args.command() {
+        match command {
+            arg_parser::MyCommands::Update => update_handler(),
+        }
+    } else {
+        if let Some(postfixes) = args.postfixes() {
+            simple_postfix_handler(postfixes);
+        } else {
+            println!("automatic source file detection comming soon");
+        }
+    }
 }

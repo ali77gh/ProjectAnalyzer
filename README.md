@@ -66,23 +66,20 @@ cp ./target/release/project_analyzer /usr/local/bin/
 TODOs:
 
 - [ ] Build:
-  - [ ] publish it as a library too (automatic ci/cd).
-  - [ ] make a makefile.
   - [ ] Build binary for Windows and Mac (maybe with ci/cd).
-  - [ ] installation.
+  - [ ] installation script.
 
 - [ ] Refactor project
   - [ ] Use tokio for multi-threading
-  - [ ] Use clap for args parser
+  - [x] Use clap for args parser
   - [ ] Writing some tests (this will force you to do dependency injection)
 
 - [ ] Auto detect source code files
   - [ ] By detecting programming language postfixes
-  - [ ] By text file detector (mime)
 
 - [ ] Filter empty lines (or bracket only lines)
-- [ ] Detect comments and documantation and tests for some programing languages
-- [ ] Ignore what is in gitinore
+- [ ] Detect comments and documantation and tests for some programming languages
+- [ ] Ignore what is in gitignore
 - [ ] Watch option (live update)
 - [ ] Ignore directories by --ignore-dir
 - [ ] Ignore postfix by --ignore-postfix
