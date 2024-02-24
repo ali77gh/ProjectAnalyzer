@@ -2,16 +2,11 @@ mod error;
 pub(crate) mod result;
 mod walker;
 
-use std::borrow::Borrow;
 use std::collections::{HashMap, HashSet};
 use std::fs;
-use std::os::unix::thread;
 use std::path::PathBuf;
-use std::sync::mpsc::{Receiver, Sender};
-use std::time::Duration;
-use std::{fs::DirEntry, path::Path};
 use tokio::sync::mpsc;
-use walker::walk;
+use walker::Walker;
 
 use crate::arg_parser::MyArgs;
 
@@ -41,31 +36,14 @@ impl<'a> Analyzer<'a> {
         }
 
         let (tx12, mut rx12) = mpsc::channel::<PathBuf>(1000); // channel thread 1,2
-                                                               // thread1: walk and filter by postfix
-        let post_set_t1 = post_set.clone();
-        tokio::spawn(async move {
-            let (s, r) = std::sync::mpsc::channel();
-            let mut cb = move |x: &DirEntry| {
-                let binding = x.file_name();
-                let postfix = binding
-                    .to_str()
-                    .unwrap_or("")
-                    .split(".")
-                    .last()
-                    .unwrap_or("nothing_file");
-                if post_set_t1.contains(postfix) {
-                    s.send(x.path()).unwrap();
-                }
-            };
 
-            std::thread::spawn(move || {
-                let _ = walk(Path::new("./"), &mut cb);
-            });
+        let walker = Walker::new(
+            self.args.root_dir().to_string(),
+            tx12,
+            Some(post_set.clone()),
+        );
 
-            while let Ok(path) = r.recv() {
-                tx12.send(path).await.unwrap();
-            }
-        });
+        walker.start();
 
         let (tx23, mut rx23) = mpsc::channel::<FileWithPost>(100); // channel thread 2,3
                                                                    // thread2: file reader
