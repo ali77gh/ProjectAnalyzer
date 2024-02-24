@@ -39,6 +39,7 @@ impl<'a> Analyzer<'a> {
 
         let walker = Walker::new(
             self.args.root_dir().to_string(),
+            self.args.ignore(),
             tx12,
             Some(post_set.clone()),
         );
