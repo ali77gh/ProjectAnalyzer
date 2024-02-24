@@ -1,5 +1,6 @@
 mod analyzer;
 mod arg_parser;
+mod default_ignore;
 mod ui;
 mod update;
 

@@ -22,7 +22,18 @@ impl Walker {
         postfixes: Option<HashSet<String>>,
     ) -> Self {
         let mut ignore_hash_set: HashSet<PathBuf> = HashSet::new();
+
+        // passed ignores
         for i in ignore {
+            let mut i = i.clone();
+            if !i.starts_with("./") {
+                i = format!("./{}", i);
+            }
+            ignore_hash_set.insert(PathBuf::from(i));
+        }
+
+        // default ignores
+        for i in crate::default_ignore::get_default_ignore() {
             let mut i = i.clone();
             if !i.starts_with("./") {
                 i = format!("./{}", i);

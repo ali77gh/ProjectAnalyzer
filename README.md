@@ -79,10 +79,9 @@ TODOs:
 
 - [ ] Filter empty lines (or bracket only lines)
 - [ ] Detect comments and documantation and tests for some programming languages
-- [ ] Ignore what is in gitignore
+- [x] Ignore what is in gitignore
 - [ ] Watch option (live update)
-- [ ] Ignore directories by --ignore-dir
-- [ ] Ignore postfix by --ignore-postfix
+- [x] Ignore directories by --ignore
 - [ ] A way to do nested analyze
   - [ ] TUI mode with cd ability
   - [ ] inline small analyze for sub directoriess
