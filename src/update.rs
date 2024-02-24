@@ -1,4 +1,4 @@
-use webbrowser;
+
 
 const GITHUB_ADDR: &str = "https://github.com/ali77gh/ProjectAnalyzer/";
 

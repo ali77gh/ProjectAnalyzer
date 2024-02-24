@@ -34,15 +34,10 @@ impl MyArgs {
     }
 
     pub fn postfixes(&self) -> Option<Vec<String>> {
-        match self.postfixes.clone() {
-            Some(s) => Some(
-                s.split(',')
+        self.postfixes.clone().map(|s| s.split(',')
                     .filter(|i| !i.is_empty())
                     .map(|i| i.to_string())
-                    .collect::<Vec<String>>(),
-            ),
-            None => None,
-        }
+                    .collect::<Vec<String>>())
     }
 
     pub fn command(&self) -> Option<&MyCommands> {

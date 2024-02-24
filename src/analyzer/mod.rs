@@ -55,7 +55,7 @@ impl<'a> Analyzer<'a> {
                     .unwrap()
                     .to_str()
                     .unwrap_or("")
-                    .split(".")
+                    .split('.')
                     .last()
                     .unwrap_or("nothing_file");
 

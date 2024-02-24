@@ -57,7 +57,7 @@ impl Walker {
                 let postfix = binding
                     .to_str()
                     .unwrap_or("")
-                    .split(".")
+                    .split('.')
                     .last()
                     .unwrap_or("nothing_file");
                 if self.postfixes.contains(postfix) {

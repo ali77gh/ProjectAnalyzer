@@ -26,10 +26,6 @@ impl AnalyzeResult {
     pub fn line_counter(&self) -> &HashMap<String, u64> {
         &self.line_counter
     }
-
-    pub fn post_set(&self) -> &HashSet<String> {
-        &self.post_set
-    }
 }
 
 impl ToString for AnalyzeResult {

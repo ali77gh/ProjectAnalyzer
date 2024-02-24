@@ -69,6 +69,7 @@ TODOs:
   - [ ] Build binary for Windows and Mac (maybe with ci/cd).
   - [ ] installation script.
 
+- [ ] Result should sort by user input
 - [ ] Refactor project
   - [x] Use tokio for multi-threading
   - [x] Use clap for args parser
