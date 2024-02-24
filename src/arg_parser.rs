@@ -1,7 +1,7 @@
 use clap::{Parser, Subcommand};
 
 /// Fast Rust binary that counts line numbers of a codebase
-#[derive(Parser, Debug)]
+#[derive(Parser, Debug, Clone)]
 #[command(version, about, long_about = None)]
 pub struct MyArgs {
     /// Number of times to greet
@@ -34,10 +34,12 @@ impl MyArgs {
     }
 
     pub fn postfixes(&self) -> Option<Vec<String>> {
-        self.postfixes.clone().map(|s| s.split(',')
-                    .filter(|i| !i.is_empty())
-                    .map(|i| i.to_string())
-                    .collect::<Vec<String>>())
+        self.postfixes.clone().map(|s| {
+            s.split(',')
+                .filter(|i| !i.is_empty())
+                .map(|i| i.to_string())
+                .collect::<Vec<String>>()
+        })
     }
 
     pub fn command(&self) -> Option<&MyCommands> {
@@ -45,8 +47,9 @@ impl MyArgs {
     }
 }
 
-#[derive(Subcommand, Debug)]
+#[derive(Subcommand, Debug, Clone)]
 pub enum MyCommands {
     /// Opens github
     Update,
+    Watch,
 }

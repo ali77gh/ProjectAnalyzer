@@ -70,6 +70,8 @@ TODOs:
   - [ ] installation script.
 
 - [ ] Result should sort by user input
+- [ ] Fix table problem on huge source codes (calculate spaces)
+- [ ] divide Counter module from analyzer (same thing you do with Walker)
 - [ ] Refactor project
   - [x] Use tokio for multi-threading
   - [x] Use clap for args parser
@@ -81,7 +83,7 @@ TODOs:
 - [ ] Filter empty lines (or bracket only lines)
 - [ ] Detect comments and documantation and tests for some programming languages
 - [x] Ignore what is in gitignore
-- [ ] Watch option (live update)
+- [x] Watch option (live update)
 - [x] Ignore directories by --ignore
 - [ ] A way to do nested analyze
   - [ ] TUI mode with cd ability
