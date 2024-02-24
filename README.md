@@ -70,7 +70,7 @@ TODOs:
   - [ ] installation script.
 
 - [ ] Refactor project
-  - [ ] Use tokio for multi-threading
+  - [x] Use tokio for multi-threading
   - [x] Use clap for args parser
   - [ ] Writing some tests (this will force you to do dependency injection)
 

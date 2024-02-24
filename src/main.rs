@@ -11,7 +11,8 @@ use crate::ui::chart::DrawableChart;
 
 use update::update_handler;
 
-fn main() {
+#[tokio::main]
+async fn main() {
     let args = MyArgs::parse();
 
     if let Some(command) = args.command() {
@@ -20,7 +21,7 @@ fn main() {
         }
     } else {
         let analyzer = Analyzer::new(&args);
-        match analyzer.analyze() {
+        match analyzer.analyze().await {
             Ok(result) => {
                 println!("{}", result.to_string());
                 if result.file_counter().len() > 1 {

@@ -2,10 +2,15 @@ mod error;
 pub(crate) mod result;
 mod walker;
 
+use std::borrow::Borrow;
 use std::collections::{HashMap, HashSet};
 use std::fs;
+use std::os::unix::thread;
 use std::path::PathBuf;
-use std::{fs::DirEntry, path::Path, sync::mpsc, thread};
+use std::sync::mpsc::{Receiver, Sender};
+use std::time::Duration;
+use std::{fs::DirEntry, path::Path};
+use tokio::sync::mpsc;
 use walker::walk;
 
 use crate::arg_parser::MyArgs;
@@ -22,7 +27,7 @@ impl<'a> Analyzer<'a> {
         Self { args }
     }
 
-    pub fn analyze(&self) -> Result<AnalyzeResult, AnalyzeErr> {
+    pub async fn analyze(&self) -> Result<AnalyzeResult, AnalyzeErr> {
         let mut file_counter: HashMap<String, u64> = HashMap::new();
         let mut line_counter: HashMap<String, u64> = HashMap::new();
         let mut post_set: HashSet<String> = HashSet::new();
@@ -35,11 +40,12 @@ impl<'a> Analyzer<'a> {
             post_set.insert(p.clone());
         }
 
-        let (tx12, rx12) = mpsc::channel::<Option<PathBuf>>(); // channel thread 1,2
+        let (tx12, mut rx12) = mpsc::channel::<PathBuf>(1000); // channel thread 1,2
                                                                // thread1: walk and filter by postfix
         let post_set_t1 = post_set.clone();
-        thread::spawn(move || {
-            let mut cb = |x: &DirEntry| {
+        tokio::spawn(async move {
+            let (s, r) = std::sync::mpsc::channel();
+            let mut cb = move |x: &DirEntry| {
                 let binding = x.file_name();
                 let postfix = binding
                     .to_str()
@@ -48,17 +54,23 @@ impl<'a> Analyzer<'a> {
                     .last()
                     .unwrap_or("nothing_file");
                 if post_set_t1.contains(postfix) {
-                    tx12.send(Some(x.path())).unwrap();
+                    s.send(x.path()).unwrap();
                 }
             };
-            let _ = walk(Path::new("./"), &mut cb);
-            tx12.send(None).unwrap();
+
+            std::thread::spawn(move || {
+                let _ = walk(Path::new("./"), &mut cb);
+            });
+
+            while let Ok(path) = r.recv() {
+                tx12.send(path).await.unwrap();
+            }
         });
 
-        let (tx23, rx23) = mpsc::channel::<Option<FileWithPost>>(); // channel thread 2,3
-                                                                    // thread2: file reader
-        thread::spawn(move || {
-            while let Some(x) = rx12.recv().unwrap() {
+        let (tx23, mut rx23) = mpsc::channel::<FileWithPost>(100); // channel thread 2,3
+                                                                   // thread2: file reader
+        tokio::spawn(async move {
+            while let Some(x) = rx12.recv().await {
                 let postfix = x
                     .file_name()
                     .unwrap()
@@ -67,24 +79,25 @@ impl<'a> Analyzer<'a> {
                     .split(".")
                     .last()
                     .unwrap_or("nothing_file");
+
                 let content = fs::read(x.clone()).unwrap_or_else(|_| {
                     println!("can't read file:{}", x.to_str().unwrap());
                     vec![]
                 });
-                tx23.send(Some(FileWithPost::new(postfix.to_string(), content)))
+                tx23.send(FileWithPost::new(postfix.to_string(), content))
+                    .await
                     .unwrap();
             }
-            tx23.send(None).unwrap();
         });
 
         // main thread: counting
-        let nl = b'\n';
-        let nl = &&nl; // pre process dereference
-        while let Some(x) = rx23.recv().unwrap() {
+        // let nl = b'\n';
+        // let nl = &&nl; // pre process dereference
+        while let Some(x) = rx23.recv().await {
             let fc = file_counter.get_mut(x.postfix.as_str()).unwrap();
             let lc = line_counter.get_mut(x.postfix.as_str()).unwrap();
             *fc += 1;
-            *lc += x.bytes.iter().filter(|byte| byte == nl).count() as u64;
+            *lc += x.bytes.iter().filter(|byte| **byte == b'\n').count() as u64;
         }
 
         Ok(AnalyzeResult::new(file_counter, line_counter, post_set))

@@ -9,7 +9,7 @@ edition = "2021"
 clap = { version = "4.5.1", features = ["derive"] }
 piechart = "1.0.0"
 webbrowser = "0.8.11"
-
+tokio = { version = "1", features = ["full"] }
 
 [profile.release]
 opt-level = 3
