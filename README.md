@@ -70,7 +70,7 @@ TODOs:
   - [ ] installation script.
 
 - [ ] Result should sort by user input
-- [ ] Fix table problem on huge source codes (calculate spaces)
+- [x] Fix table problem on huge source codes (calculate spaces)
 - [ ] divide Counter module from analyzer (same thing you do with Walker)
 - [ ] Refactor project
   - [x] Use tokio for multi-threading

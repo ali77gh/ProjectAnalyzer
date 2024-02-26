@@ -30,43 +30,25 @@ impl AnalyzeResult {
 
 impl ToString for AnalyzeResult {
     fn to_string(&self) -> String {
-        let mut result = String::new();
+        let mut table = crate::ui::table::Table::new();
 
-        result.push_str("┌───────────────────────────────────────────────┐\n");
-        result.push_str("│                ProjectAnalyzer                │\n");
-        result.push_str("│                                               │\n");
-        result.push_str("│ https://github.com/ali77gh/ProjectAnalyzer    │\n");
-        result.push_str("│                                               │\n");
+        table.write_center("ProjectAnalyzer");
+
+        table.empty_line();
+        table.write("https://github.com/ali77gh/ProjectAnalyzer");
+        table.empty_line();
+
         for postfix in self.post_set.iter() {
             let file_counter = self.file_counter.get(postfix).unwrap();
             let line_counter = self.line_counter.get(postfix).unwrap();
-            let division = if file_counter == &0 {
-                0
-            } else {
-                line_counter / file_counter
-            };
-            result.push_str("├───────────────────────────────────────────────┤\n");
-            result
-                .push_str(format!("│ {} files result:                 \t\t│\n", postfix).as_str());
-            result.push_str(
-                format!(
-                    "│   {} {} files                   \t\t│\n",
-                    file_counter, postfix,
-                )
-                .as_str(),
-            );
-            result.push_str(
-                format!(
-                    "│   {} lines of {}               \t\t│\n",
-                    line_counter, postfix
-                )
-                .as_str(),
-            );
-            result.push_str(
-                format!("│   average lines per file: {}       \t\t│\n", division).as_str(),
-            );
+            if *line_counter == 0 {
+                continue;
+            }
+            table.draw_line();
+            table.write(format!("{} files result:", postfix));
+            table.write(format!("  {} {} files", file_counter, postfix));
+            table.write(format!("  {} lines of {} ", line_counter, postfix));
         }
-        result.push_str("└───────────────────────────────────────────────┘\n");
-        result
+        table.render_table()
     }
 }
