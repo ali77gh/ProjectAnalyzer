@@ -11,7 +11,7 @@ use walker::Walker;
 use crate::arg_parser::MyArgs;
 
 use self::error::AnalyzeErr;
-use self::result::AnalyzeResult;
+use self::result::{AnalyzeResult, AnalyzeResultItem};
 
 pub struct Analyzer<'a> {
     args: &'a MyArgs,
@@ -79,7 +79,15 @@ impl<'a> Analyzer<'a> {
             *lc += x.bytes.iter().filter(|byte| **byte == b'\n').count() as u64;
         }
 
-        Ok(AnalyzeResult::new(file_counter, line_counter, post_set))
+        let mut r = vec![];
+        for postfix in post_set {
+            r.push(AnalyzeResultItem::new(
+                postfix.clone(),
+                *file_counter.get(postfix.as_str()).unwrap(),
+                *line_counter.get(postfix.as_str()).unwrap(),
+            ));
+        }
+        Ok(AnalyzeResult::new(r))
     }
 }
 

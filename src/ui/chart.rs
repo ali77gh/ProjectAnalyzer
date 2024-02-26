@@ -10,11 +10,11 @@ impl DrawableChart for AnalyzeResult {
     fn draw(&self) {
         let mut dataset = vec![];
         let mut counter = 0;
-        for lang in self.line_counter() {
+        for item in self.iter() {
             let style: Style = (*COLORS.get(counter).unwrap()).into();
             dataset.push(Data {
-                label: lang.0.into(),
-                value: *lang.1 as f32,
+                label: item.name().to_string(),
+                value: item.lines() as f32,
                 color: Some(style),
                 fill: *CHARS.get(counter).unwrap(),
             });

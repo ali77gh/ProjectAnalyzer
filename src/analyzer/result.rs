@@ -1,30 +1,48 @@
-use std::collections::{HashMap, HashSet};
-
-pub struct AnalyzeResult {
-    file_counter: HashMap<String, u64>,
-    line_counter: HashMap<String, u64>,
-    post_set: HashSet<String>,
+pub struct AnalyzeResultItem {
+    postfix: String,
+    name: Option<String>, // from json database
+    files: u64,
+    lines: u64,
+    empty_lines: u64, // TODO
 }
 
-impl AnalyzeResult {
-    pub fn new(
-        file_counter: HashMap<String, u64>,
-        line_counter: HashMap<String, u64>,
-        post_set: HashSet<String>,
-    ) -> Self {
+impl AnalyzeResultItem {
+    pub fn new(postfix: String, files: u64, lines: u64) -> Self {
         Self {
-            file_counter,
-            line_counter,
-            post_set,
+            postfix,
+            name: None, // TODO
+            files,
+            lines,
+            empty_lines: 0, // TODO
         }
     }
 
-    pub fn file_counter(&self) -> &HashMap<String, u64> {
-        &self.file_counter
+    pub fn empty_lines(&self) -> u64 {
+        self.empty_lines
+    }
+    pub fn lines(&self) -> u64 {
+        self.lines
+    }
+    pub fn files(&self) -> u64 {
+        self.files
+    }
+    pub fn name(&self) -> &str {
+        match &self.name {
+            Some(x) => x.as_str(),
+            None => self.postfix.as_str(),
+        }
+    }
+}
+
+pub struct AnalyzeResult(Vec<AnalyzeResultItem>);
+
+impl AnalyzeResult {
+    pub fn new(vec: Vec<AnalyzeResultItem>) -> Self {
+        Self(vec)
     }
 
-    pub fn line_counter(&self) -> &HashMap<String, u64> {
-        &self.line_counter
+    pub fn iter(&self) -> &Vec<AnalyzeResultItem> {
+        &self.0
     }
 }
 
@@ -38,16 +56,14 @@ impl ToString for AnalyzeResult {
         table.write("https://github.com/ali77gh/ProjectAnalyzer");
         table.empty_line();
 
-        for postfix in self.post_set.iter() {
-            let file_counter = self.file_counter.get(postfix).unwrap();
-            let line_counter = self.line_counter.get(postfix).unwrap();
-            if *line_counter == 0 {
+        for item in self.iter() {
+            if item.lines == 0 {
                 continue;
             }
             table.draw_line();
-            table.write(format!("{} files result:", postfix));
-            table.write(format!("  {} {} files", file_counter, postfix));
-            table.write(format!("  {} lines of {} ", line_counter, postfix));
+            table.write(format!("{} files result:", item.name()));
+            table.write(format!("  files: {}", item.files()));
+            table.write(format!("  lines: {} ", item.lines()));
         }
         table.render_table()
     }

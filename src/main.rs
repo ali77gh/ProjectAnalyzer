@@ -35,7 +35,7 @@ async fn analyze_and_show(args: &MyArgs) {
     match analyzer.analyze().await {
         Ok(result) => {
             println!("{}", result.to_string());
-            if result.file_counter().len() > 1 {
+            if result.iter().len() > 1 {
                 result.draw();
             }
         }
