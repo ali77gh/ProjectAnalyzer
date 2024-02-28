@@ -1,13 +1,13 @@
 pub struct AnalyzeResultItem {
     postfix: String,
     name: Option<String>, // from json database
-    files: u64,
-    lines: u64,
-    empty_lines: u64, // TODO
+    files: usize,
+    lines: usize,
+    empty_lines: usize, // TODO
 }
 
 impl AnalyzeResultItem {
-    pub fn new(postfix: String, files: u64, lines: u64) -> Self {
+    pub fn new(postfix: String, files: usize, lines: usize) -> Self {
         Self {
             postfix,
             name: None, // TODO
@@ -17,13 +17,13 @@ impl AnalyzeResultItem {
         }
     }
 
-    pub fn empty_lines(&self) -> u64 {
+    pub fn empty_lines(&self) -> usize {
         self.empty_lines
     }
-    pub fn lines(&self) -> u64 {
+    pub fn lines(&self) -> usize {
         self.lines
     }
-    pub fn files(&self) -> u64 {
+    pub fn files(&self) -> usize {
         self.files
     }
     pub fn name(&self) -> &str {
@@ -37,8 +37,23 @@ impl AnalyzeResultItem {
 pub struct AnalyzeResult(Vec<AnalyzeResultItem>);
 
 impl AnalyzeResult {
-    pub fn new(vec: Vec<AnalyzeResultItem>) -> Self {
-        Self(vec)
+    pub fn new() -> Self {
+        Self(vec![])
+    }
+
+    pub fn add(&mut self, postfix: &str, content: Vec<u8>) {
+        let position = self.0.iter().position(|x| x.postfix == postfix);
+        let lines = content.iter().filter(|i| **i == b'\n').count();
+
+        match position {
+            Some(position) => {
+                self.0[position].files += 1;
+                self.0[position].lines += lines;
+            }
+            None => self
+                .0
+                .push(AnalyzeResultItem::new(postfix.to_string(), 1, lines)),
+        }
     }
 
     pub fn iter(&self) -> &Vec<AnalyzeResultItem> {

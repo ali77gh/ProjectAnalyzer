@@ -69,9 +69,8 @@ TODOs:
   - [ ] Build binary for Windows and Mac (maybe with ci/cd).
   - [ ] installation script.
 
-- [ ] Result should sort by user input
 - [x] Fix table problem on huge source codes (calculate spaces)
-- [ ] divide Counter module from analyzer (same thing you do with Walker)
+- [x] divide Counter module from analyzer (same thing you do with Walker)
 - [ ] Refactor project
   - [x] Use tokio for multi-threading
   - [x] Use clap for args parser
@@ -81,15 +80,15 @@ TODOs:
   - [ ] By detecting programming language postfixes
 
 - [ ] Filter empty lines (or bracket only lines)
-- [ ] Detect comments and documantation and tests for some programming languages
+- [ ] Detect comments and documentation and tests for some programming languages
 - [x] Ignore what is in gitignore
 - [x] Watch option (live update)
 - [x] Ignore directories by --ignore
 - [ ] A way to do nested analyze
   - [ ] TUI mode with cd ability
-  - [ ] inline small analyze for sub directoriess
+  - [ ] inline small analyze for sub directories
 
 - [ ] Json output
-- [ ] VS-Code extention
+- [ ] VS-Code extension
 - [ ] Git history for more analyze
 - [ ] a website to do all this in frontend by downloading zip from github + WASM (is that even possible? will CORS block me to do this?)

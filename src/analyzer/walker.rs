@@ -7,6 +7,8 @@ use std::{
 
 use tokio::sync::mpsc::Sender;
 
+use crate::arg_parser::MyArgs;
+
 pub struct Walker {
     root_dir: String,
     ignore: HashSet<PathBuf>,
@@ -15,16 +17,11 @@ pub struct Walker {
 }
 
 impl Walker {
-    pub fn new(
-        root_dir: String,
-        ignore: &[std::string::String],
-        output_channel: Sender<PathBuf>,
-        postfixes: Option<HashSet<String>>,
-    ) -> Self {
+    pub fn new(args: &MyArgs, output_channel: Sender<PathBuf>) -> Self {
         let mut ignore_hash_set: HashSet<PathBuf> = HashSet::new();
 
         // passed ignores
-        for i in ignore {
+        for i in args.ignore() {
             let mut i = i.clone();
             if !i.starts_with("./") {
                 i = format!("./{}", i);
@@ -41,11 +38,16 @@ impl Walker {
             ignore_hash_set.insert(PathBuf::from(i));
         }
 
+        let mut postfixes = HashSet::<String>::new();
+        for p in args.postfixes().expect("TODO auto detect postfixes") {
+            postfixes.insert(p);
+        }
+
         Self {
-            root_dir,
+            root_dir: args.root_dir().to_string(),
             ignore: ignore_hash_set,
             output_channel,
-            postfixes: postfixes.expect("TODO auto detect code files"),
+            postfixes, // TODO
         }
     }
 
