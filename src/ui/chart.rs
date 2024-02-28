@@ -8,6 +8,10 @@ pub trait DrawableChart {
 
 impl DrawableChart for AnalyzeResult {
     fn draw(&self) {
+        if self.iter().len() <= 1 {
+            return;
+        }
+
         let mut dataset = vec![];
         let mut counter = 0;
         for item in self.iter() {

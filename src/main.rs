@@ -23,10 +23,13 @@ async fn main() {
     if let Some(command) = args.command() {
         match command {
             arg_parser::MyCommands::Update => update_handler(),
-            arg_parser::MyCommands::Watch => watch(&args).await,
         }
     } else {
-        analyze_and_show(&args).await;
+        if args.watch() {
+            watch(&args).await;
+        } else {
+            analyze_and_show(&args).await;
+        }
     }
 }
 
@@ -38,9 +41,7 @@ async fn analyze_and_show(args: &MyArgs) {
                 println!("{}", serde_json::to_string(&result).unwrap());
             } else {
                 println!("{}", result.to_string());
-                if result.iter().len() > 1 {
-                    result.draw();
-                }
+                result.draw();
             }
         }
         Err(err) => {

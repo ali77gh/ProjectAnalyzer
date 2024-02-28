@@ -13,7 +13,7 @@ pub struct MyArgs {
     ignore: Vec<String>,
 
     /// Will keep running and update result whenever anything changed.
-    #[arg(short, long)]
+    #[arg(short, long, default_value_t = false)]
     watch: bool,
 
     /// Filter by list of file postfixes example: project_analyzer --postfixes py,rs,cpp
@@ -53,11 +53,14 @@ impl MyArgs {
     pub fn json(&self) -> bool {
         self.json
     }
+
+    pub fn watch(&self) -> bool {
+        self.watch
+    }
 }
 
 #[derive(Subcommand, Debug, Clone)]
 pub enum MyCommands {
     /// Opens github
     Update,
-    Watch, //TODO remove this
 }
