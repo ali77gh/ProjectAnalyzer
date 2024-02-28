@@ -1,3 +1,6 @@
+use serde::Serialize;
+
+#[derive(Serialize)]
 pub struct AnalyzeResultItem {
     postfix: String,
     name: Option<String>, // from json database
@@ -34,6 +37,7 @@ impl AnalyzeResultItem {
     }
 }
 
+#[derive(Serialize)]
 pub struct AnalyzeResult(Vec<AnalyzeResultItem>);
 
 impl AnalyzeResult {

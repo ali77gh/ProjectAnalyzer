@@ -12,13 +12,17 @@ pub struct MyArgs {
     #[arg(long)]
     ignore: Vec<String>,
 
-    /// will keep running and update result whenever anything changed.
+    /// Will keep running and update result whenever anything changed.
     #[arg(short, long)]
     watch: bool,
 
     /// Filter by list of file postfixes example: project_analyzer --postfixes py,rs,cpp
     #[arg(short = 'p', long)]
     postfixes: Option<String>,
+
+    /// Output as json
+    #[arg(short, long, default_value_t = false)]
+    json: bool,
 
     #[command(subcommand)]
     command: Option<MyCommands>,
@@ -45,11 +49,15 @@ impl MyArgs {
     pub fn command(&self) -> Option<&MyCommands> {
         self.command.as_ref()
     }
+
+    pub fn json(&self) -> bool {
+        self.json
+    }
 }
 
 #[derive(Subcommand, Debug, Clone)]
 pub enum MyCommands {
     /// Opens github
     Update,
-    Watch,
+    Watch, //TODO remove this
 }

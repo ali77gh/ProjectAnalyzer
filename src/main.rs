@@ -34,9 +34,13 @@ async fn analyze_and_show(args: &MyArgs) {
     let analyzer = Analyzer::new(args);
     match analyzer.analyze().await {
         Ok(result) => {
-            println!("{}", result.to_string());
-            if result.iter().len() > 1 {
-                result.draw();
+            if args.json() {
+                println!("{}", serde_json::to_string(&result).unwrap());
+            } else {
+                println!("{}", result.to_string());
+                if result.iter().len() > 1 {
+                    result.draw();
+                }
             }
         }
         Err(err) => {
