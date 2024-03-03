@@ -25,12 +25,10 @@ async fn main() {
         match command {
             arg_parser::MyCommands::Update => update_handler(),
         }
+    } else if args.watch() {
+        watch(&args).await;
     } else {
-        if args.watch() {
-            watch(&args).await;
-        } else {
-            analyze_and_show(&args).await;
-        }
+        analyze_and_show(&args).await;
     }
 }
 

@@ -17,7 +17,7 @@ impl DrawableChart for AnalyzeResult {
         for item in self.iter() {
             let style: Style = (get_rounded(&COLORS, counter)).into();
             dataset.push(Data {
-                label: item.name().to_string(),
+                label: item.postfix().to_string(),
                 value: item.lines() as f32,
                 color: Some(style),
                 fill: get_rounded(&CHARS, counter),

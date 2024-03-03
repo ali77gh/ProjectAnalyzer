@@ -79,14 +79,9 @@ TODOs:
 - [x] Auto detect source code files
   - [x] By detecting programming language postfixes
 
-- [ ] Filter empty lines (or bracket only lines)
-- [ ] Detect comments and documentation and tests for some programming languages
 - [x] Ignore what is in gitignore
 - [x] Watch option (live update)
 - [x] Ignore directories by --ignore
-- [ ] A way to do nested analyze
-  - [ ] TUI mode with cd ability
-  - [ ] inline small analyze for sub directories
 
 - [x] Json output
 - [ ] VS-Code extension

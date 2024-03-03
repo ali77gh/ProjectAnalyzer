@@ -14,7 +14,7 @@ lazy_static! {
         let content = String::from_utf8(content.to_vec()).unwrap();
 
         let mut m = HashSet::new();
-        for line in content.split("\n") {
+        for line in content.split('\n') {
             m.insert(line.to_string());
         }
         m

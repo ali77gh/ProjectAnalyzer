@@ -3,37 +3,27 @@ use serde::Serialize;
 #[derive(Serialize)]
 pub struct AnalyzeResultItem {
     postfix: String,
-    name: Option<String>, // from json database
     files: usize,
     lines: usize,
-    empty_lines: usize, // TODO
 }
 
 impl AnalyzeResultItem {
     pub fn new(postfix: String, files: usize, lines: usize) -> Self {
         Self {
             postfix,
-            name: None, // TODO
             files,
             lines,
-            empty_lines: 0, // TODO
         }
     }
 
-    pub fn empty_lines(&self) -> usize {
-        self.empty_lines
-    }
     pub fn lines(&self) -> usize {
         self.lines
     }
     pub fn files(&self) -> usize {
         self.files
     }
-    pub fn name(&self) -> &str {
-        match &self.name {
-            Some(x) => x.as_str(),
-            None => self.postfix.as_str(),
-        }
+    pub fn postfix(&self) -> &str {
+        &self.postfix
     }
 }
 
@@ -80,7 +70,7 @@ impl ToString for AnalyzeResult {
                 continue;
             }
             table.draw_line();
-            table.write(format!("{} files result:", item.name()));
+            table.write(format!("{} files result:", item.postfix()));
             table.write(format!("  files: {}", item.files()));
             table.write(format!("  lines: {} ", item.lines()));
         }
