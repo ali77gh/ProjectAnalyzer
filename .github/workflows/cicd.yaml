@@ -1,0 +1,52 @@
+name: Rust Build and Deploy
+
+on:
+  push:
+    branches: [stable]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Rust Toolchain
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+    - name: Install Dependencies
+      run: cargo build --workspace -j$(nproc)
+    - name: Build for Linux, Windows, and macOS
+      run: cargo build --release --workspace --target $TARGET
+      env:
+        TARGET: ${{ matrix.target }}
+
+    - name: Archive Artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: ${{ matrix.os }}-${{ matrix.target }}-binaries
+        path: ./target/${{ matrix.target }}/release/*.tar.gz
+        if-no-files-found: ignore
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/download-artifact@v2
+      with:
+        name: linux-x86_64-binaries
+    - uses: actions/download-artifact@v2
+      with:
+        name: windows-x86_64-binaries
+    - uses: actions/download-artifact@v2
+      with:
+        name: macos-x86_64-binaries
+    - name: Extract Artifacts
+      run: ls target
+    - name: Upload to GitHub Pages
