@@ -13,7 +13,7 @@ pub struct Walker {
     root_dir: String,
     ignore: HashSet<PathBuf>,
     output_channel: Sender<PathBuf>,
-    postfixes: HashSet<String>,
+    postfixes: Option<HashSet<String>>,
 }
 
 impl Walker {
@@ -38,16 +38,22 @@ impl Walker {
             ignore_hash_set.insert(PathBuf::from(i));
         }
 
-        let mut postfixes = HashSet::<String>::new();
-        for p in args.postfixes().expect("TODO auto detect postfixes") {
-            postfixes.insert(p);
-        }
+        let postfixes = match args.postfixes() {
+            Some(arg_p) => {
+                let mut postfixes = HashSet::<String>::new();
+                for p in arg_p {
+                    postfixes.insert(p);
+                }
+                Some(postfixes)
+            }
+            None => None,
+        };
 
         Self {
             root_dir: args.root_dir().to_string(),
             ignore: ignore_hash_set,
             output_channel,
-            postfixes, // TODO
+            postfixes,
         }
     }
 
@@ -62,9 +68,20 @@ impl Walker {
                     .split('.')
                     .last()
                     .unwrap_or("nothing_file");
-                if self.postfixes.contains(postfix) {
-                    s.send(x.path()).unwrap();
-                }
+
+                match &self.postfixes {
+                    Some(p) => {
+                        if p.contains(postfix) {
+                            s.send(x.path()).unwrap();
+                        }
+                    }
+                    None => {
+                        use crate::default_postfixes::DEFAULT_POSTFIXES;
+                        if DEFAULT_POSTFIXES.contains(postfix) {
+                            s.send(x.path()).unwrap();
+                        }
+                    }
+                };
             };
 
             std::thread::spawn(move || {

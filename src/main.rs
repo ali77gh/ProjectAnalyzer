@@ -1,6 +1,7 @@
 mod analyzer;
 mod arg_parser;
 mod default_ignore;
+mod default_postfixes;
 mod ui;
 mod update;
 

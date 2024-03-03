@@ -45,7 +45,7 @@ Thread_1    ➡️    Thread_2    ️️➡️    Thread_3
 
 <br>
 
-## Installaion
+## Installation
 
 ```sh
 cd /tmp 
@@ -76,8 +76,8 @@ TODOs:
   - [x] Use clap for args parser
   - [ ] Writing some tests (this will force you to do dependency injection)
 
-- [ ] Auto detect source code files
-  - [ ] By detecting programming language postfixes
+- [x] Auto detect source code files
+  - [x] By detecting programming language postfixes
 
 - [ ] Filter empty lines (or bracket only lines)
 - [ ] Detect comments and documentation and tests for some programming languages
@@ -88,7 +88,7 @@ TODOs:
   - [ ] TUI mode with cd ability
   - [ ] inline small analyze for sub directories
 
-- [ ] Json output
+- [x] Json output
 - [ ] VS-Code extension
 - [ ] Git history for more analyze
 - [ ] a website to do all this in frontend by downloading zip from github + WASM (is that even possible? will CORS block me to do this?)
